@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SRH - Knowledge Management System</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles.css">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="header-top">
+                <div class="logo-container">
+                    <div class="logo-icon">
+                        <i class="fas fa-book-open"></i>
+                    </div>
+                    <h1>SRH</h1>
+                    <span class="subtitle">Knowledge Management System</span>
+                </div>
+                <div class="user-info">
+                    <span id="userDisplay"></span>
+                    <button id="logoutBtn" class="logout-btn">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </button>
+                </div>
+            </div>
+            <div class="search-container">
+                <div class="search-box">
+                    <i class="fas fa-search search-icon"></i>
+                    <input type="text" id="searchInput" placeholder="Search documents...">
+                    <button class="search-btn" onclick="searchDocuments()">
+                        <i class="fas fa-search"></i>
+                        Search
+                    </button>
+                </div>
+                <div class="search-filters">
+                    <select id="categoryFilter" onchange="searchDocuments()">
+                        <option value="">All Categories</option>
+                        <option value="technical">Technical</option>
+                        <option value="process">Process</option>
+                        <option value="policy">Policy</option>
+                        <option value="other">Other</option>
+                    </select>
+                    <select id="dateFilter" onchange="searchDocuments()">
+                        <option value="">All Dates</option>
+                        <option value="today">Today</option>
+                        <option value="week">This Week</option>
+                        <option value="month">This Month</option>
+                        <option value="year">This Year</option>
+                    </select>
+                    <select id="typeFilter" onchange="searchDocuments()">
+                        <option value="">All Types</option>
+                        <option value="pdf">PDF</option>
+                        <option value="doc">Document</option>
+                        <option value="image">Image</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+            </div>
+        </header>
+
+        <main>
+            <div class="sidebar">
+                <div class="upload-section">
+                    <h3>Upload Document</h3>
+                    <form id="uploadForm">
+                        <div class="file-upload-container">
+                            <input type="file" id="fileInput" accept=".pdf,.doc,.docx,.txt,.jpg,.jpeg,.png" class="file-input" required>
+                            <label for="fileInput" class="file-upload-label">
+                                <i class="fas fa-cloud-upload-alt"></i>
+                                <span>Choose File *</span>
+                            </label>
+                            <span id="fileName" class="file-name">No file chosen</span>
+                        </div>
+                        <div id="filePreview" class="file-preview"></div>
+                        <div class="form-group">
+                            <input type="text" id="documentTitle" placeholder="Document Title *" required>
+                        </div>
+                        <div class="form-group">
+                            <div class="tags-input-container">
+                                <input type="text" id="documentTags" placeholder="Tags (comma-separated)">
+                                <div id="tagsPreview" class="tags-preview"></div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <select id="documentCategory" required>
+                                <option value="">Select Category *</option>
+                                <option value="technical">Technical</option>
+                                <option value="process">Process</option>
+                                <option value="policy">Policy</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="upload-btn">
+                            <i class="fas fa-upload"></i>
+                            Upload
+                        </button>
+                    </form>
+                </div>
+                <div class="categories">
+                    <h3>Categories</h3>
+                    <ul>
+                        <li><a href="#" data-category="all" class="active">All Documents</a></li>
+                        <li><a href="#" data-category="technical">Technical</a></li>
+                        <li><a href="#" data-category="process">Process</a></li>
+                        <li><a href="#" data-category="policy">Policy</a></li>
+                        <li><a href="#" data-category="other">Other</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="content">
+                <div class="documents-grid" id="documentsGrid">
+                    <!-- Documents will be dynamically added here -->
+                </div>
+            </div>
+        </main>
+    </div>
+    <div class="chat-widget">
+        <button class="chat-button" onclick="toggleChat()">
+            <i class="fas fa-comments"></i>
+        </button>
+        <div class="chat-container" id="chatContainer">
+            <div class="chat-header">
+                <h3>SRH Assistant</h3>
+                <div class="chat-actions">
+                    <button class="faq-btn" onclick="toggleFAQ()">
+                        <i class="fas fa-question-circle"></i>
+                    </button>
+                    <button class="close-chat" onclick="toggleChat()">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="chat-messages" id="chatMessages">
+                <div class="message bot">
+                    <i class="fas fa-robot"></i>
+                    <div class="message-content">
+                        Hello! I'm your SRH assistant. How can I help you today?
+                    </div>
+                </div>
+            </div>
+            <div class="faq-section" id="faqSection">
+                <h4>Frequently Asked Questions</h4>
+                <div class="faq-list">
+                    <div class="faq-item" onclick="askFAQ('How do I upload a document?')">
+                        <i class="fas fa-upload"></i>
+                        <span>How do I upload a document?</span>
+                    </div>
+                    <div class="faq-item" onclick="askFAQ('How do I search for documents?')">
+                        <i class="fas fa-search"></i>
+                        <span>How do I search for documents?</span>
+                    </div>
+                    <div class="faq-item" onclick="askFAQ('What file types are supported?')">
+                        <i class="fas fa-file"></i>
+                        <span>What file types are supported?</span>
+                    </div>
+                    <div class="faq-item" onclick="askFAQ('How do I manage categories?')">
+                        <i class="fas fa-folder"></i>
+                        <span>How do I manage categories?</span>
+                    </div>
+                    <div class="faq-item" onclick="askFAQ('What are the user roles?')">
+                        <i class="fas fa-users"></i>
+                        <span>What are the user roles?</span>
+                    </div>
+                </div>
+            </div>
+            <div class="chat-input">
+                <input type="text" id="chatInput" placeholder="Type your message..." onkeypress="handleChatInput(event)">
+                <button onclick="sendMessage()">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html> 
